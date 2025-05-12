@@ -1,0 +1,47 @@
+{
+  "large_print": {
+    "tag_prefix": "lp_",
+    "tags": ["a", "b", "c", "č", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "r", "s", "š", "t", "u", "v", "z", "ž"]
+  },
+  "small_print": {
+    "tag_prefix": "sp_",
+    "tags": ["a", "b", "c", "č", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "r", "s", "š", "t", "u", "v", "z", "ž"]
+  },
+  "large_cursive": {
+    "tag_prefix": "lc_",
+    "tags": ["a", "b", "c", "č", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "r", "s", "š", "t", "u", "v", "z", "ž"]
+  },
+  "small_cursive": {
+    "tag_prefix": "sc_",
+    "tags": ["a", "b", "c", "č", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "r", "s", "š", "t", "u", "v", "z", "ž"]
+  },
+  "large_print_vert": {
+    "tag_prefix": "lp_",
+    "tags": ["a", "a", "b", "b", "c", "c", "č", "č", "d", "d", "e", "e", "f", "f", "g", "g", "h", "h", "i", "i", "j", "j", "k", "k", "l", "l", "m", "m", "n", "n", "o", "o", "p", "p", "r", "r", "s", "s", "š", "š", "t", "t", "u", "u", "v", "v", "z", "z", "ž", "ž"]
+  },
+  "small_print_vert": {
+    "tag_prefix": "sp_",
+    "tags": ["a", "a", "b", "b", "c", "c", "č", "č", "d", "d", "e", "e", "f", "f", "g", "g", "h", "h", "i", "i", "j", "j", "k", "k", "l", "l", "m", "m", "n", "n", "o", "o", "p", "p", "r", "r", "s", "s", "š", "š", "t", "t", "u", "u", "v", "v", "z", "z", "ž", "ž"]
+  },
+  "large_cursive_vert": {
+    "tag_prefix": "lc_",
+    "tags": ["a", "a", "b", "b", "c", "c", "č", "č", "d", "d", "e", "e", "f", "f", "g", "g", "h", "h", "i", "i", "j", "j", "k", "k", "l", "l", "m", "m", "n", "n", "o", "o", "p", "p", "r", "r", "s", "s", "š", "š", "t", "t", "u", "u", "v", "v", "z", "z", "ž", "ž"]
+  },
+  "small_cursive_vert": {
+    "tag_prefix": "sc_",
+    "tags": ["a", "a", "b", "b", "c", "c", "č", "č", "d", "d", "e", "e", "f", "f", "g", "g", "h", "h", "i", "i", "j", "j", "k", "k", "l", "l", "m", "m", "n", "n", "o", "o", "p", "p", "r", "r", "s", "s", "š", "š", "t", "t", "u", "u", "v", "v", "z", "z", "ž", "ž"]
+  },
+  "small_print_mixed_reversed_1": {
+    "tags": ["lp_l", "sp_k", "lp_k", "sp_j", "lp_j", "sp_i", "lp_i", "sp_h", "lp_h", "sp_g", "lp_g", "sp_f", "lp_f", "sp_e", "lp_e", "sp_d", "lp_d", "sp_č", "lp_č", "sp_c", "lp_c", "sp_b", "lp_b", "sp_a", "lp_a"]
+  },
+  "small_print_mixed_reversed_2": {
+    "tags": ["sp_ž", "lp_ž", "sp_z", "lp_z", "sp_v", "lp_v", "sp_u", "lp_u", "sp_t", "lp_t", "sp_š", "lp_š", "sp_s", "lp_s", "sp_r", "lp_r", "sp_p", "lp_p", "sp_o", "lp_o", "sp_n", "lp_n", "sp_m", "lp_m", "sp_l"]
+  },
+  "mixed_cursive_vert": {
+    "tags": ["lc_a", "sc_a", "lc_b", "sc_b", "lc_c", "sc_c", "lc_č", "sc_č", "lc_d", "sc_d", "lc_e", "sc_e", "lc_f", "sc_f", "lc_g", "sc_g", "lc_h", "sc_h", "lc_i", "sc_i", "lc_j", "sc_j", "lc_k", "sc_k", "lc_l", "sc_l", "lc_m", "sc_m", "lc_n", "sc_n", "lc_o", "sc_o", "lc_p", "sc_p", "lc_r", "sc_r", "lc_s", "sc_s", "lc_š", "sc_š", "lc_t", "sc_t", "lc_u", "sc_u", "lc_v", "sc_v", "lc_z", "sc_z", "lc_ž", "sc_ž"]
+  },
+  "small_cursive_exception_0": {
+    "tag_prefix": "sc_",
+    "tags": ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "r", "s", "š", "t", "u", "v", "z", "ž", "č"]
+  }
+}
