@@ -25,8 +25,8 @@ def main():
             os.mkdir(path)
     
     # iterate mapping data
-    for i, d, files in enumerate(d_man.mapping_data.items()):
-        for j, file, data in enumerate(files.items()):
+    for i, (d, files) in enumerate(d_man.mapping_data.items()):
+        for j, (file, data) in enumerate(files.items()):
             print(f"Processing directory {d}, {i + 1}/{len(d_man.mapping_data)}; file {file}, {j + 1}/{len(files)}")
             image = Image.open(os.path.join(d, file)).convert('RGB')
             processor = ImageProcessor(image)

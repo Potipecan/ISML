@@ -99,29 +99,29 @@ class ImageProcessor:
         
     def process_image(self, settings, schemas, tag_map, output_dir, file_stem):
         corners = np.array(settings['corners'])
-        h_width = settings['h_width']
-        v_width = settings['v_width']
+        # h_width = settings['h_width']
+        # v_width = settings['v_width']
         rotation = settings.get('rotation', 0)
         tags = schemas[settings['schema_key']]['tags']
         
         aligned = self._align_image(corners)
         
-        x_coords = np.linspace(0, aligned.shape[1], 26, dtype=float)
-        y_coords = np.linspace(0, aligned.shape[0], 51, dtype=float)
+        x_coords = np.linspace(0, aligned.shape[1], 26, dtype=float).round().astype(int)
+        y_coords = np.linspace(0, aligned.shape[0], 51, dtype=float).round().astype(int)
         
         x_tags = tags if len(tags) == 25 else None
         y_tags = tags if len(tags) == 50 else None
         im_index = 0
         
         for x in range(25):
-            x_from = int(np.round(x_coords[x] + v_width / 2))
-            x_to = int(np.round(x_coords[x + 1] - v_width / 2))
+            x_from = x_coords[x]
+            x_to = x_coords[x + 1]
             
             tag = x_tags[x] if x_tags is not None else None
             
             for y in range(50):
-                y_from = int(np.round(y_coords[y] + h_width / 2))
-                y_to = int(np.round(y_coords[y + 1] - h_width / 2))
+                y_from = y_coords[y]
+                y_to = y_coords[y + 1]
 
                 tag = y_tags[y] if y_tags is not None else tag
                 sub_img = aligned[y_from:y_to, x_from:x_to]
@@ -140,7 +140,7 @@ class ImageProcessor:
                     
                 # further processing here
                     
-                cv2.imwrite(os.path.join(output_dir, tag, f"{file_stem}_{im_index}.png"), cv2.cvtcolor(sub_img, cv2.COLOR_BGR2RGB))
+                cv2.imwrite(os.path.join(output_dir, tag, f"{file_stem}_{im_index}.png"), cv2.cvtColor(sub_img, cv2.COLOR_BGR2RGB))
                 im_index += 1
                 
         
