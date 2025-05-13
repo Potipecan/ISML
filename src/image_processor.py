@@ -45,13 +45,7 @@ class ImageProcessor:
         le = lines[v_edge_mask[y_centers[v_edge_mask].argmin()]][0].reshape((2, 2)) # left edge
         re = lines[v_edge_mask[y_centers[v_edge_mask].argmax()]][0].reshape((2, 2)) # right edge
     
-        # cv2.line(imdata, te[0], te[1], (255, 255, 0), 2)
-        # cv2.line(imdata, be[0], be[1], (255, 255, 0), 2)
-        # cv2.line(imdata, le[0], le[1], (255, 255, 0), 2)
-        # cv2.line(imdata, re[0], re[1], (255, 255, 0), 2)
-        # 
-        # plt.imshow(cv2.cvtColor(imdata, cv2.COLOR_BGR2RGB))
-        # plt.show()
+        # return intersections of the four edges
         return (
             vect_intersect(*te, *le),
             vect_intersect(*be, *le),
@@ -67,81 +61,7 @@ class ImageProcessor:
     def set_corners(self, corners):
         self._corners = corners - self._pre_crop
         
-    def _align_image(self, corners):
-        # Define the 4 corner points of the tetragon in the image
-        # Format: np.float32([[x1, y1], [x2, y2], [x3, y3], [x4, y4]])
-        # The order should be: top-left, top-right, bottom-right, bottom-left
-        pts_src = np.array(corners[[0, 1, 3, 2]], dtype=np.float32) # swap bottom corners
-        
-        # Compute the width and height of the destination rectangle        
-        width_top = np.linalg.norm(pts_src[0] - pts_src[1])
-        width_bottom = np.linalg.norm(pts_src[3] - pts_src[2])
-        width = max(int(width_top), int(width_bottom))
-        
-        height_left = np.linalg.norm(pts_src[0] - pts_src[3])
-        height_right = np.linalg.norm(pts_src[1] - pts_src[2])
-        height = max(int(height_left), int(height_right))
-        
-        # Destination points for the rectangle (in order: TL, TR, BR, BL)
-        pts_dst = np.float32([
-            [0, 0],
-            [width - 1, 0],
-            [width - 1, height - 1],
-            [0, height - 1]
-        ])
-        
-        # Compute the perspective transform matrix
-        M = cv2.getPerspectiveTransform(pts_src, pts_dst)
-        
-        # Apply the perspective warp
-        warped = cv2.warpPerspective(self._raw_image, M, (width, height))
-        return warped
-        
-    def process_image(self, settings, schemas, tag_map, output_dir, file_stem):
-        corners = np.array(settings['corners'])
-        # h_width = settings['h_width']
-        # v_width = settings['v_width']
-        rotation = settings.get('rotation', 0)
-        tags = schemas[settings['schema_key']]['tags']
-        
-        aligned = self._align_image(corners)
-        
-        x_coords = np.linspace(0, aligned.shape[1], 26, dtype=float).round().astype(int)
-        y_coords = np.linspace(0, aligned.shape[0], 51, dtype=float).round().astype(int)
-        
-        x_tags = tags if len(tags) == 25 else None
-        y_tags = tags if len(tags) == 50 else None
-        im_index = 0
-        
-        for x in range(25):
-            x_from = x_coords[x]
-            x_to = x_coords[x + 1]
-            
-            tag = x_tags[x] if x_tags is not None else None
-            
-            for y in range(50):
-                y_from = y_coords[y]
-                y_to = y_coords[y + 1]
 
-                tag = y_tags[y] if y_tags is not None else tag
-                sub_img = aligned[y_from:y_to, x_from:x_to]
-                
-                if rotation != 0:
-                    match rotation:
-                        case 90:
-                            rotate_code = cv2.ROTATE_90_CLOCKWISE
-                        case 180:
-                            rotate_code = cv2.ROTATE_180
-                        case 270:
-                            rotate_code = cv2.ROTATE_90_COUNTERCLOCKWISE
-                        case _:
-                            raise ValueError('Invalid rotation')
-                    sub_img = cv2.rotate(sub_img, rotate_code)
-                    
-                # further processing here
-                    
-                cv2.imwrite(os.path.join(output_dir, tag, f"{file_stem}_{im_index}.png"), cv2.cvtColor(sub_img, cv2.COLOR_BGR2RGB))
-                im_index += 1
                 
         
 def _debug_show_processed(self):
