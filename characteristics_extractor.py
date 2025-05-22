@@ -51,7 +51,7 @@ def main():
     parser.add_argument('-s', '--shape', type=shape_tuple, default="(2, 2)")
     parser.add_argument('-p', '--output_dir', type=str, required=False)
     parser.add_argument('letter_dir', type=str)
-    parser.add_argument('output_name', type=str)
+    parser.add_argument('output_name', type=str, default="chara")
     args = parser.parse_args()
 
     if args.output_dir is None:
@@ -60,17 +60,11 @@ def main():
         os.mkdir(args.output_dir)
 
     d_man = StoredDataManager(args.database)
-    settings = {
-        "shape": list(args.shape),
-        "result_file": os.path.join(args.output_dir, f"{args.output_name}.csv")
-    }
+    result_file = os.path.join(args.output_dir, f"{args.output_name}_{args.shape[0]}x{args.shape[1]}.csv")
 
-    # save settings
-    with open(os.path.join(args.output_dir, f"{args.output_name}.json"), 'w', encoding='utf-8') as f:
-        json.dump(settings, f)
-
-    with open(settings["result_file"], 'w', encoding='utf-8') as f:
+    with open(result_file, 'w', encoding='utf-8') as f:
         csv_w = csv.writer(f, delimiter=';')
+        csv_w.writerow(args.shape) # write shape of image subdivision
         # iterate through sorted letter directories
         for d in os.scandir(args.letter_dir):
             if not d.is_dir():
@@ -80,8 +74,8 @@ def main():
             tag = d.name  # directory name is also the letters' tag
             if tag not in d_man.tag_map:
                 continue
-                
-            print(f"Processing dir: {tag}:")
+            
+            last_signs = 0
             for j, pic in enumerate(os.scandir(d.path)):
                 im_data = cv2.imread(pic.path)
                 ch = get_characteristics(im_data, args.shape)
@@ -89,9 +83,12 @@ def main():
                 # save data
                 #format: dir/file;tag code;flattened characteristics list
                 csv_w.writerow([f'{tag}/{pic.name}', d_man.tag_map[tag]] + ch.flatten().tolist())
+                # fancy progress log
                 signs = int((j + 1) / n_files * 10)
-                print("\r" + "#" * signs + "_" * (10 - signs) + f' {(j + 1) / n_files * 100:0.1f} %', end="")
-            print()
+                if signs != last_signs:
+                    print(f"\rProcessing dir '{tag}': " + "#" * signs + "_" * (10 - signs) + f' {(j + 1) / n_files * 100:0.1f} %', end="")
+                    last_signs = signs
+            print(f"\rProcessing dir '{tag}': DONE")
 
 
 if __name__ == "__main__":
