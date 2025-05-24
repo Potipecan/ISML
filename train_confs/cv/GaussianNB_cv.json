@@ -1,0 +1,1 @@
+{"model": "GaussianNB", "hyper_grid": {"var_smoothing": [1e-09, 1e-08, 1e-07]}}

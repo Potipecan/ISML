@@ -1,0 +1,1 @@
+{"model": "RandomForestClassifier", "hyper_grid": {"n_estimators": [100, 200], "max_depth": [null, 10, 20], "min_samples_split": [2, 5], "max_features": ["sqrt", "log2"]}}
