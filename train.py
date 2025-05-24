@@ -25,8 +25,8 @@ def load_data(data_file):
     else:
         raise ValueError(f"Invalid data file suffix: {p.suffix}")
 
-    with open_f(data_file, 'r') as df:
-        dim = tuple(map(int, next(df).split(b';')))  # get width and height from first line
+    with open_f(data_file, 'rt') as df:
+        dim = tuple(map(int, next(df).split(';')))  # get width and height from first line
         reader = csv.reader(df, delimiter=';')
         y = []
         x = []
