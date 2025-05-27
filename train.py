@@ -38,11 +38,12 @@ def load_data(data_file):
 
 def get_model(config):
     model = eval(config['model'])
-        
+
     if not 'hyper_grid' in config:
         return model(**config.get("hyper", {})), False
     else:
-        return RandomizedSearchCV(model(**config.get("hyper", {})), config['hyper_grid'], n_iter=10, cv=3, n_jobs=-1), True
+        return RandomizedSearchCV(model(**config.get("hyper", {})), config['hyper_grid'], n_iter=10, cv=3,
+                                  n_jobs=-1), True
 
 
 def train(args_results, conf, data, validate_conf):
@@ -60,8 +61,10 @@ def train(args_results, conf, data, validate_conf):
         "train_size": 0.8
     }
     split_params.update(config.get("split_params", {}))
-    
-    x_train, x_test, y_train, y_test = train_test_split(x, y, **split_params)
+
+    x_train, x_test, y_train, y_test = train_test_split(x, y, 
+                                                        test_size=split_params["test_size"],
+                                                        train_size=split_params["train_size"])
     model.fit(x_train, y_train)
     if hyper_search:
         clf = model.best_estimator_
