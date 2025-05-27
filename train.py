@@ -61,7 +61,7 @@ def train(args_results, conf, data, validate_conf):
     }
     split_params.update(config.get("split_params", {}))
     
-    x_train, x_test, y_train, y_test = train_test_split(x, y, *split_params)
+    x_train, x_test, y_train, y_test = train_test_split(x, y, **split_params)
     model.fit(x_train, y_train)
     if hyper_search:
         clf = model.best_estimator_
