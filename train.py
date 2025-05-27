@@ -1,16 +1,14 @@
-from sklearn import neural_network, model_selection, neighbors, naive_bayes, tree, linear_model, ensemble, metrics, svm
-from sklearn.neural_network import MLPClassifier
-from sklearn.svm import SVC
-from sklearn.linear_model import SGDClassifier, RidgeClassifier
-from sklearn.naive_bayes import GaussianNB
-from sklearn.neighbors import KNeighborsClassifier
-from sklearn.tree import DecisionTreeClassifier
-from sklearn.ensemble import AdaBoostClassifier, GradientBoostingClassifier, RandomForestClassifier
+from sklearn.neural_network import *
+from sklearn.svm import *
+from sklearn.linear_model import *
+from sklearn.naive_bayes import *
+from sklearn.neighbors import *
+from sklearn.tree import *
+from sklearn.ensemble import *
 from sklearn.model_selection import train_test_split, RandomizedSearchCV
 from sklearn.metrics import classification_report, confusion_matrix
 import csv
 import gzip
-import os
 import argparse
 from pathlib import Path
 import json
@@ -40,17 +38,11 @@ def load_data(data_file):
 
 def get_model(config):
     model = eval(config['model'])
-    
-    has_hyper = 'hyper' in config
-    has_grid = 'hyper_grid' in config
-    
-    if has_hyper == has_grid:
-        raise ValueError("Config error: 'hyper' and 'hyper_grid' cannot be defined in the same config")
-    
-    if has_hyper:
-        return model(**config['hyper']), False
+        
+    if not 'hyper_grid' in config:
+        return model(**config.get("hyper", {})), False
     else:
-        return RandomizedSearchCV(model(), config['hyper_grid'], n_iter=10, cv=3, n_jobs=-1), True
+        return RandomizedSearchCV(model(**config.get("hyper", {})), config['hyper_grid'], n_iter=10, cv=3, n_jobs=-1), True
 
 
 def train(args_results, conf, data, validate_conf):
@@ -63,11 +55,13 @@ def train(args_results, conf, data, validate_conf):
     if validate_conf:
         exit(0)
     dim, x, y = load_data(data)
-    metaparams = {
-        "test_size": 0.2
+    split_params = {
+        "test_size": 0.2,
+        "train_size": 0.8
     }
-    metaparams.update(config.get("metaparams", {}))
-    x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=metaparams['test_size'])
+    split_params.update(config.get("split_params", {}))
+    
+    x_train, x_test, y_train, y_test = train_test_split(x, y, *split_params)
     model.fit(x_train, y_train)
     if hyper_search:
         clf = model.best_estimator_

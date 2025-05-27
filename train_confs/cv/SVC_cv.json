@@ -1,1 +1,0 @@
-{"model": "SVC", "hyper_grid": {"C": [0.1, 1, 10], "kernel": ["linear", "rbf", "poly"], "gamma": ["scale", "auto"]}}

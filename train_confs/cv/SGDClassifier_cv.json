@@ -1,1 +1,18 @@
-{"model": "SGDClassifier", "hyper_grid": {"loss": ["hinge", "log_loss", "modified_huber"], "alpha": [0.0001, 0.001, 0.01], "penalty": ["l2", "l1", "elasticnet"], "learning_rate": ["optimal", "invscaling", "adaptive"]}}
+{
+  "model": "SGDClassifier",
+  "hyper": {
+    "loss": "log_loss",
+    "penalty": "l2",
+    "alpha": 0.0001,
+    "max_iter": 500,
+    "early_stopping": true
+  },
+  "hyper_grid": {
+    "alpha": [1e-4, 1e-3, 1e-2],
+    "learning_rate": ["optimal", "adaptive"],
+    "eta0": [0.01, 0.1]
+  },
+  "split_params": {
+    "test_size": 0.2
+  }
+}
