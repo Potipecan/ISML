@@ -53,6 +53,40 @@ def get_model(config):
         return RandomizedSearchCV(model(), config['hyper_grid'], n_iter=10, cv=3, n_jobs=-1), True
 
 
+def train(args_results, conf, data, validate_conf):
+    config = json.load(open(conf, 'r'))
+    try:
+        model, hyper_search = get_model(config)
+    except Exception as ex:
+        print(ex)
+        exit(1)
+    if validate_conf:
+        exit(0)
+    dim, x, y = load_data(data)
+    metaparams = {
+        "test_size": 0.2
+    }
+    metaparams.update(config.get("metaparams", {}))
+    x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=metaparams['test_size'])
+    model.fit(x_train, y_train)
+    if hyper_search:
+        clf = model.best_estimator_
+    else:
+        clf = model
+    # results
+    y_pred = clf.predict(x_test)
+    results = {
+        "hyperparams": clf.get_params(),
+        "classification_report": classification_report(y_test, y_pred, output_dict=True),
+        "confusion_matrix": confusion_matrix(y_test, y_pred).tolist()
+    }
+    try:
+        with open(args_results, 'w', encoding='utf-8') as f:
+            json.dump(results, f, ensure_ascii=False)
+    except ValueError:
+        print(results)
+
+
 def main():
     parser = argparse.ArgumentParser("train")
     parser.add_argument('--validate_conf', action='store_true')
@@ -61,46 +95,12 @@ def main():
     parser.add_argument("conf", type=str)
     args = parser.parse_args()
 
-    config = json.load(open(args.conf, 'r'))
-    try:
-        model, hyper_search = get_model(config)
-    except Exception as ex:
-        print(ex)
-        exit(1)
+    conf = args.conf
+    validate_conf = args.validate_conf
+    data = args.data
+    args_results = args.results
 
-    if args.validate_conf:
-        exit(0)
-
-    dim, x, y = load_data(args.data)
-
-    metaparams = {
-        "test_size": 0.2
-    }
-
-    metaparams.update(config.get("metaparams", {}))
-
-    x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=metaparams['test_size'])
-    model.fit(x_train, y_train)
-    
-    if hyper_search:
-        clf = model.best_estimator_
-    else:
-        clf = model
-
-    # results
-    y_pred = clf.predict(x_test)
-
-    results = {
-        "hyperparams": clf.get_params(),
-        "classification_report": classification_report(y_test, y_pred, output_dict=True),
-        "confusion_matrix": confusion_matrix(y_test, y_pred).tolist()
-    }
-
-    try:
-        with open(args.results, 'w', encoding='utf-8') as f:
-            json.dump(results, f, ensure_ascii=False)
-    except ValueError:
-        print(results)
+    train(args_results, conf, data, validate_conf)
 
 
 if __name__ == "__main__":
