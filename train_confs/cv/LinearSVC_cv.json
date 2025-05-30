@@ -1,0 +1,10 @@
+{
+  "model": "LinearSVC",
+  "hyper_grid": {
+    "max_iter": [100, 300, 500] 
+  },
+  "split_params": {
+    "test_size": 0.2,
+    "train_size": 0.5
+  }
+}
