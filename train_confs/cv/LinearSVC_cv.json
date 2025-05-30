@@ -1,7 +1,7 @@
 {
   "model": "LinearSVC",
   "hyper_grid": {
-    "max_iter": [100, 300, 500] 
+    "C": [0.3, 0.7, 1.0] 
   },
   "split_params": {
     "test_size": 0.2,
