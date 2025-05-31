@@ -5,6 +5,6 @@
     "weights": ["uniform", "distance"] 
   },
   "split_params": {
-    "train_size": 0.4
+    "train_size": 0.2
   }
 }
