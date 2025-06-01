@@ -1,0 +1,7 @@
+{
+  "model": "ExtraTreeClassifier",
+  "hyper_grid": {
+    "criterion": ["gini", "entropy", "log_loss"],
+    "splitter": ["random", "best"]
+  }
+}
