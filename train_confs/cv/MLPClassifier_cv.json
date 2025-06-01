@@ -1,7 +1,6 @@
 {
   "model": "MLPClassifier",
   "hyper": {
-    "max_iter": 200,
     "early_stopping": true
   },
   "hyper_grid": {
