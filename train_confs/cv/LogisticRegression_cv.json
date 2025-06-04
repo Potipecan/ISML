@@ -3,8 +3,7 @@
   "hyper": {
     "solver": "saga",
     "multi_class": "multinomial",
-    "max_iter": 500,
-    "C": 1.0
+    "max_iter": 500
   },
   "hyper_grid": {
     "C": [0.1, 1.0, 10.0],

@@ -1,17 +1,8 @@
 {
   "model": "DecisionTreeClassifier",
   "hyper_grid": {
-    "max_depth": [
-      null,
-      5,
-      10,
-      20
-    ],
-    "min_samples_split": [
-      2,
-      5,
-      10
-    ],
+    "max_depth": [null, 5, 10, 20],
+    "min_samples_split": [2, 5, 10],
     "criterion": [
       "gini",
       "entropy",
