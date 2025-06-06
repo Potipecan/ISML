@@ -82,7 +82,7 @@ def main():
 
                 # save data
                 #format: dir/file;tag code;flattened characteristics list
-                csv_w.writerow([f'{tag}/{pic.name}', d_man.tag_map[tag]] + ch.flatten().tolist())
+                csv_w.writerow([tag] + ch.flatten().tolist())
                 # fancy progress log
                 signs = int((j + 1) / n_files * 10)
                 if signs != last_signs:

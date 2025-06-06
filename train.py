@@ -30,8 +30,8 @@ def load_data(data_file):
         x = []
 
         for row in reader:
-            y.append(int(row[1]))
-            x.append(list(map(float, row[2:])))
+            y.append(row[0])
+            x.append(list(map(float, row[1:])))
 
         return dim, x, y
 
