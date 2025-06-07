@@ -5,7 +5,9 @@ from sklearn.naive_bayes import *
 from sklearn.neighbors import *
 from sklearn.tree import *
 from sklearn.ensemble import *
-from sklearn.model_selection import train_test_split, RandomizedSearchCV
+from sklearn.preprocessing import *
+from sklearn.pipeline import Pipeline
+from sklearn.model_selection import train_test_split, RandomizedSearchCV, GridSearchCV, RepeatedStratifiedKFold
 from sklearn.metrics import classification_report, confusion_matrix
 import csv
 import gzip
@@ -13,6 +15,7 @@ import argparse
 from pathlib import Path
 import json
 
+passthrough = 'passthrough'
 
 def load_data(data_file):
     p = Path(data_file)
@@ -36,51 +39,62 @@ def load_data(data_file):
         return dim, x, y
 
 
-def get_model(config):
-    model = eval(config['model'])
+def get_model_pipeline(config):
+    pipe_config = config['pipeline']
+    
+    pipe = []
+    grid = {}
+    for k, v in pipe_config.items():
+        if 'vals' in v:
+            cls = list(map(lambda x: eval(str(x)), v['vals']))
+            grid[k] = cls
+            pipe.append((k, "passthrough"))
+            
+        if 'classname' in v:
+            cls = eval(v["classname"])
+            params = v.get("params", {})
+            pipe.append((k, cls(**params)))
+        
+        if 'grid' in v:
+            for p, vals in v['grid'].items():
+                e_vals = list(map(lambda x: eval(str(x)), vals))
+                grid[f"{k}__{p}"] = e_vals
+            
 
-    if not 'hyper_grid' in config:
-        return model(**config.get("hyper", {})), False
-    else:
-        return RandomizedSearchCV(model(**config.get("hyper", {})), config['hyper_grid'], n_iter=10, cv=3,
-                                  n_jobs=-1), True
+    pipe = Pipeline(pipe)
+    return pipe, grid
 
 
 def train(args_results, conf, data, validate_conf):
     config = json.load(open(conf, 'r'))
     try:
-        model, hyper_search = get_model(config)
+        pipe, grid = get_model_pipeline(config)
     except Exception as ex:
         print(ex)
-        exit(1)
-    if validate_conf:
-        exit(0)
-    dim, x, y = load_data(data)
-    split_params = {
-        "test_size": 0.2,
-        "train_size": 0.8
-    }
-    split_params.update(config.get("split_params", {}))
+        return 1
 
-    x_train, x_test, y_train, y_test = train_test_split(x, y, 
-                                                        **split_params)
-    model.fit(x_train, y_train)
-    if hyper_search:
-        clf = model.best_estimator_
-    else:
-        clf = model
+        
+    # data loading and preprocessing
+    dim, x, y = load_data(data)
+        
+    # training
+    gs = GridSearchCV(estimator=pipe, param_grid=grid, scoring='roc_auc', verbose=1)
+    gs.fit(x, y)
+    
+    
     # results
-    y_pred = clf.predict(x_test)
     results = {
-        "hyperparams": clf.get_params(),
-        "classification_report": classification_report(y_test, y_pred, output_dict=True),
-        "confusion_matrix": confusion_matrix(y_test, y_pred).tolist()
+        "config": config,
+        "results": gs.cv_results_
     }
     try:
         with open(args_results, 'w', encoding='utf-8') as f:
             json.dump(results, f, ensure_ascii=False)
     except ValueError:
         print(results)
+        return 1    
+    
+    return 0
 
 
 def main():
@@ -96,7 +110,7 @@ def main():
     data = args.data
     args_results = args.results
 
-    train(args_results, conf, data, validate_conf)
+    exit(train(args_results, conf, data, validate_conf))
 
 
 if __name__ == "__main__":
