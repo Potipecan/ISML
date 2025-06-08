@@ -15,10 +15,11 @@ import argparse
 from pathlib import Path
 import json
 import numpy as np
+from pandas import DataFrame
 
 passthrough = 'passthrough'
 
-class NumpyEncoder(json.JSONEncoder):
+class DataFrameEncoder(json.JSONEncoder):
     """ Special json encoder for numpy types """
     def default(self, obj):
         if isinstance(obj, np.integer):
@@ -27,7 +28,10 @@ class NumpyEncoder(json.JSONEncoder):
             return float(obj)
         elif isinstance(obj, np.ndarray):
             return obj.tolist()
-        return json.JSONEncoder.default(self, obj)
+        try:
+            return json.JSONEncoder.default(self, obj)
+        except TypeError:
+            return f'{type(obj).__name__}()'
     
 def load_data(data_file):
     p = Path(data_file)
@@ -101,7 +105,7 @@ def train(args_results, conf, data, validate_conf):
     }
     try:
         with open(args_results, 'w', encoding='utf-8') as f:
-            json.dump(results, f, ensure_ascii=False, cls=NumpyEncoder)
+            json.dump(results, f, ensure_ascii=False, cls=DataFrameEncoder)
     except ValueError:
         print(results)
         return 1    
