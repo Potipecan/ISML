@@ -14,9 +14,21 @@ import gzip
 import argparse
 from pathlib import Path
 import json
+import numpy as np
 
 passthrough = 'passthrough'
 
+class NumpyEncoder(json.JSONEncoder):
+    """ Special json encoder for numpy types """
+    def default(self, obj):
+        if isinstance(obj, np.integer):
+            return int(obj)
+        elif isinstance(obj, np.floating):
+            return float(obj)
+        elif isinstance(obj, np.ndarray):
+            return obj.tolist()
+        return json.JSONEncoder.default(self, obj)
+    
 def load_data(data_file):
     p = Path(data_file)
     if p.suffix == '.gz':
@@ -89,7 +101,7 @@ def train(args_results, conf, data, validate_conf):
     }
     try:
         with open(args_results, 'w', encoding='utf-8') as f:
-            json.dump(results, f, ensure_ascii=False)
+            json.dump(results, f, ensure_ascii=False, cls=NumpyEncoder)
     except ValueError:
         print(results)
         return 1    
