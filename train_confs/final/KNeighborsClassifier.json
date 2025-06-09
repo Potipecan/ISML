@@ -1,0 +1,20 @@
+{
+  "pipeline": {
+    "preprocessing": {
+      "vals": [
+        "passthrough",
+        "MinMaxScaler()",
+        "StandardScaler()",
+        "MaxAbsScaler()",
+        "Normalizer()"
+      ]
+    },
+    "clf":{
+      "classname": "KNeighborsClassifier",
+      "grid": {
+        "n_neighbors": [3, 5, 7, 9, 11],
+        "weights": ["uniform", "distance"]
+      }
+    }
+  }
+}

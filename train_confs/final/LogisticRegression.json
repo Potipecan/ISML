@@ -1,0 +1,25 @@
+{
+  "pipeline": {
+    "preprocessing": {
+      "vals": [
+        "passthrough",
+        "MinMaxScaler()",
+        "StandardScaler()",
+        "MaxAbsScaler()",
+        "Normalizer()"
+      ]
+    },
+    "clf":{
+      "classname": "LogisticRegression",
+      "params": {
+        "solver": "saga",
+        "multi_class": "multinomial",
+        "max_iter": 500
+      },
+      "grid": {
+        "C": [0.5, 1.0, 10.0, 20.0],
+        "fit_intercept": [true, false]
+      }
+    }
+  }
+}

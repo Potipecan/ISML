@@ -1,0 +1,28 @@
+{
+  "pipeline": {
+    "preprocessing": {
+      "vals": [
+        "passthrough",
+        "MinMaxScaler()",
+        "StandardScaler()",
+        "MaxAbsScaler()",
+        "Normalizer()"
+      ]
+    },
+    "clf":{
+      "classname": "SGDClassifier",
+      "params": {
+        "loss": "log_loss",
+        "penalty": "l2",
+        "alpha": 0.0001,
+        "max_iter": 500,
+        "early_stopping": true
+      },
+      "grid": {
+        "alpha": [1e-4, 1e-3, 1e-2, 1e-1],
+        "learning_rate": ["optimal", "adaptive"],
+        "eta0": [0.01, 0.1, 1]
+      }
+    }
+  }
+}

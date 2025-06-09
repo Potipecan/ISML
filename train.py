@@ -33,6 +33,13 @@ class DataFrameEncoder(json.JSONEncoder):
         except TypeError:
             return f'{type(obj).__name__}()'
     
+
+def val_deserializer(val):
+    try:
+        return eval(str(val))
+    except NameError:
+        return val
+    
 def load_data(data_file):
     p = Path(data_file)
     if p.suffix == '.gz':
@@ -73,7 +80,7 @@ def get_model_pipeline(config):
         
         if 'grid' in v:
             for p, vals in v['grid'].items():
-                e_vals = list(map(lambda x: eval(str(x)), vals))
+                e_vals = list(map(val_deserializer, vals))
                 grid[f"{k}__{p}"] = e_vals
             
 
@@ -89,6 +96,8 @@ def train(args_results, conf, data, validate_conf):
         print(ex)
         return 1
 
+    if validate_conf:
+        return 0
         
     # data loading and preprocessing
     dim, x, y = load_data(data)
