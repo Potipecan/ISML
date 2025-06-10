@@ -15,7 +15,7 @@
         "solver": "saga",
         "multi_class": "multinomial",
         "max_iter": 500,
-        "fit_intercept":  true,
+        "fit_intercept":  true
       },
       "grid": {
         "C": [1.0, 10.0, 20.0]
