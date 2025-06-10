@@ -16,7 +16,6 @@
         "multi_class": "multinomial",
         "max_iter": 500,
         "fit_intercept":  true,
-        "eta0": 10
       },
       "grid": {
         "C": [1.0, 10.0, 20.0]
