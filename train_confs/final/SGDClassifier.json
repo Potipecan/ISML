@@ -19,9 +19,8 @@
         "early_stopping": true
       },
       "grid": {
-        "alpha": [1e-4, 1e-3, 1e-2, 1e-1],
-        "learning_rate": ["optimal", "adaptive"],
-        "eta0": [0.01, 0.1, 1]
+        "alpha": [1e-4, 1e-3],
+        "learning_rate": ["optimal", "adaptive"]
       }
     }
   }

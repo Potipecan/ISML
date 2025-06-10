@@ -14,11 +14,11 @@
       "params": {
         "solver": "saga",
         "multi_class": "multinomial",
-        "max_iter": 500
+        "max_iter": 500,
+        "fit_intercept":  true
       },
       "grid": {
-        "C": [0.5, 1.0, 10.0, 20.0],
-        "fit_intercept": [true, false]
+        "C": [1.0, 10.0, 20.0]
       }
     }
   }
