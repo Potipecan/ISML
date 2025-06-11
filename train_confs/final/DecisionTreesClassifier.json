@@ -10,7 +10,7 @@
       ]
     },
     "clf": {
-      "classname": "DecisionTreesClassifier",
+      "classname": "DecisionTreeClassifier",
       "grid": {
         "max_depth": [
           null,
