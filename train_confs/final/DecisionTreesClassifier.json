@@ -1,0 +1,28 @@
+{
+  "pipeline": {
+    "preprocessing": {
+      "vals": [
+        "passthrough",
+        "MinMaxScaler()",
+        "StandardScaler()",
+        "MaxAbsScaler()",
+        "Normalizer()"
+      ]
+    },
+    "clf": {
+      "classname": "DecisionTreesClassifier",
+      "grid": {
+        "max_depth": [
+          null,
+          10,
+          20
+        ],
+        "criterion": [
+          "gini",
+          "entropy",
+          "log_loss"
+        ]
+      }
+    }
+  }
+}

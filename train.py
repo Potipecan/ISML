@@ -103,7 +103,7 @@ def train(args_results, conf, data, validate_conf):
     dim, x, y = load_data(data)
         
     # training
-    gs = GridSearchCV(estimator=pipe, param_grid=grid, verbose=1, n_jobs=-1)
+    gs = GridSearchCV(estimator=pipe, param_grid=grid, verbose=1, n_jobs=-1, cv=2)
     gs.fit(x, y)
     
     
